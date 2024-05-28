@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_HOST = 'unix:///var/run/docker.sock'
+    }
+
     stages {
         stage('Build Express Server') {
             steps {
@@ -14,9 +18,7 @@ pipeline {
             steps {
                 script {
                     sh 'docker stop docker-express-server || true && docker rm docker-express-server || true'
-
-                    docker.image('docker-express-server').run('-d -p 3000:3000 --name docker-express-server')
-                    
+                    sh 'docker run -d -p 3000:3000 --name docker-express-server docker-express-server'
                     sleep 10
                 }
             }
@@ -44,7 +46,6 @@ pipeline {
     post {
         always {
             script {
-                // Clean up the Express server container
                 sh 'docker stop docker-express-server || true && docker rm docker-express-server || true'
             }
         }
