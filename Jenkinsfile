@@ -1,33 +1,18 @@
 pipeline {
     agent any
 
-    environment {
-        DOCKER_HOST = 'unix:///var/run/docker.sock'
-    }
-
     stages {
-        stage('Build Express Server') {
+        stage('Checkout SCM') {
             steps {
-                script {
-                    docker.build('docker-express-server', 'DockerExpressServer')
-                }
+                checkout scm
             }
         }
 
-        stage('Deploy Express Server') {
+        stage('Build and Deploy with Docker Compose') {
             steps {
                 script {
-                    sh 'docker stop docker-express-server || true && docker rm docker-express-server || true'
-                    sh 'docker run -d -p 3000:3000 --name docker-express-server docker-express-server'
-                    sleep 10
-                }
-            }
-        }
-
-        stage('Build Rest-Assured Tests') {
-            steps {
-                script {
-                    docker.build('rest-assured-tests', 'DockerRestAssuredServer')
+                    sh 'docker-compose -f docker-compose.yml up --build -d'
+                    sleep 20  
                 }
             }
         }
@@ -35,9 +20,7 @@ pipeline {
         stage('Run Rest-Assured Tests') {
             steps {
                 script {
-                    docker.image('rest-assured-tests').inside {
-                        sh 'mvn test'
-                    }
+                    sh 'docker-compose -f docker-compose.yml run rest-assured-tests'
                 }
             }
         }
@@ -46,7 +29,7 @@ pipeline {
     post {
         always {
             script {
-                sh 'docker stop docker-express-server || true && docker rm docker-express-server || true'
+                sh 'docker-compose -f docker-compose.yml down'
             }
         }
     }

@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  express-server:
+    build: ./DockerExpressServer
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./DockerExpressServer:/usr/src/app
+    command: npm start
+
+  rest-assured-tests:
+    build: ./DockerRestAssuredServer
+    depends_on:
+      - express-server
+    volumes:
+      - ./DockerRestAssuredServer:/usr/src/app
+    command: mvn test
