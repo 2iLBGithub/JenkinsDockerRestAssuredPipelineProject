@@ -2,10 +2,10 @@ pipeline {
     agent {
         docker {
             image 'lb2idocker/djra_project:latest'
-            args '-v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:/workspace'
+            args '-v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:/workspace -w /workspace'
         }
     }
-
+    
     environment {
         WORKSPACE_DIR = '/workspace'
     }
