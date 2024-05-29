@@ -1,12 +1,13 @@
 version: '3.8'
 
 services:
+
   express-server:
     image: lb2idocker/djra_project:latest
     ports:
       - "3000:3000"
     volumes:
-      - /workspace:/app
+      - /workspace/express-server:/app
     working_dir: /app
     command: npm start
 
@@ -15,6 +16,6 @@ services:
     depends_on:
       - express-server
     volumes:
-      - /workspace:/app
-    working_dir: /app
-    command: mvn test
+      - /workspace/rest-assured-tests:/tests
+    working_dir: /tests
+    command: sh -c "mvn package && mvn test"

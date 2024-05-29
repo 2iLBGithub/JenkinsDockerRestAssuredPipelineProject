@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'lb2idocker/djra_project:latest'
-            args '-v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/workspace'
+            args '-v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:/workspace'
         }
     }
 
@@ -21,7 +21,7 @@ pipeline {
             steps {
                 script {
                     sh 'docker-compose -f $WORKSPACE_DIR/docker-compose.yml up --build -d'
-                    sleep 20  
+                    sleep 60  
                 }
             }
         }
