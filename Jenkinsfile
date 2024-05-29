@@ -1,8 +1,9 @@
 pipeline {
-    agent any
-
-    environment {
-        DOCKER_HOST = 'unix:///var/run/docker.sock'
+    agent {
+        docker {
+            image 'lb2idocker/djra_project:latest'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
     }
 
     stages {
