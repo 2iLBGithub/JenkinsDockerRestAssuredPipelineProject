@@ -2,21 +2,18 @@ pipeline {
     agent {
         docker {
             image 'lb2idocker/djra_project:latest'
-            args '-v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:/workspace -w /workspace'
+            args '-v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:/workspace'
         }
     }
-    
     environment {
         WORKSPACE_DIR = '/workspace'
     }
-
     stages {
         stage('Checkout SCM') {
             steps {
                 checkout scm
             }
         }
-
         stage('Build and Deploy with Docker Compose') {
             steps {
                 script {
@@ -25,7 +22,6 @@ pipeline {
                 }
             }
         }
-
         stage('Run Rest-Assured Tests') {
             steps {
                 script {
@@ -34,7 +30,6 @@ pipeline {
             }
         }
     }
-
     post {
         always {
             script {
