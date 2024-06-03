@@ -12,7 +12,7 @@ node {
                 steps {
                     script {
                         sh 'docker-compose -f $WORKSPACE_DIR/docker-compose.yml up --build -d'
-                        sleep 60 
+                        sleep 60  
                     }
                 }
             }
