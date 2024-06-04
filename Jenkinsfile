@@ -6,10 +6,6 @@ pipeline {
         }
     }
 
-    environment {
-        WORKSPACE_DIR = "${env.WORKSPACE}"
-    }
-
     stages {
         stage('Checkout SCM') {
             steps {
@@ -20,8 +16,8 @@ pipeline {
         stage('Build and Deploy with Docker Compose') {
             steps {
                 script {
-                    sh 'docker-compose -f $WORKSPACE_DIR/docker-compose.yml up --build -d'
-                    sleep 60  
+                    sh 'docker-compose -f docker-compose.yml up --build -d'
+                    sleep 20  
                 }
             }
         }
@@ -29,7 +25,7 @@ pipeline {
         stage('Run Rest-Assured Tests') {
             steps {
                 script {
-                    sh 'docker-compose -f $WORKSPACE_DIR/docker-compose.yml run rest-assured-tests'
+                    sh 'docker-compose -f docker-compose.yml run rest-assured-tests'
                 }
             }
         }
@@ -38,7 +34,7 @@ pipeline {
     post {
         always {
             script {
-                sh 'docker-compose -f $WORKSPACE_DIR/docker-compose.yml down'
+                sh 'docker-compose -f docker-compose.yml down'
             }
         }
     }
