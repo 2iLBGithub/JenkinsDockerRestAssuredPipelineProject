@@ -1,0 +1,12 @@
+Need:
+
+1 - Creating Docker Images (Dockerfile)
+2 - Setting up Jenkins or ADO
+3 - Embedding tests into a pipeline
+
+Plan:
+
+1) Use existing express server as something which can be ran via docker
+2) find jenkins locally or also use docker for this
+3) Use the tests
+
